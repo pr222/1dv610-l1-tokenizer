@@ -1,16 +1,16 @@
 package Tokenizer;
 
 public class TokenRule {
-    String type;
+    String name;
     String regex;
 
-    public TokenRule(String type, String regex) {
-        this.type = type;
+    public TokenRule(String name, String regex) {
+        this.name = name;
         this.regex = regex;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
     public String getRegex() {

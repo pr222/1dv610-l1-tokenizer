@@ -1,7 +1,5 @@
 package Tokenizer;
 
-import java.util.ArrayList;
-
 public class App {
     public static void main(String[] args) {
         System.out.println("Time to tokenize!");
@@ -12,7 +10,7 @@ public class App {
 
         gramm.addRule(word);
 
-        System.out.println(gramm.getRules().get(0).getType());
+        System.out.println(gramm.getRules().get(0).getName());
         System.out.println(gramm.getRules().get(0).getRegex());
     }
 }
