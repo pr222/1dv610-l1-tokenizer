@@ -4,11 +4,11 @@ package Tokenizer;
  * A Token with a matched value and the token that was used for the match.
  */
 public class Token {
-    private TokenRule rule;
+    private String type;
     private String value;
 
-    public Token(TokenRule rule, String value) {
-        this.rule = rule;
+    public Token(String type, String value) {
+        this.type = type;
         this.value = value;
     }
 
@@ -17,10 +17,6 @@ public class Token {
     }
 
     public String getType() {
-        return rule.getName();
-    }
-
-    public TokenRule getTokenRule() {
-        return rule;
+        return type;
     }
 }

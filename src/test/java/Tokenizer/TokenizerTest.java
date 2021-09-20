@@ -39,7 +39,7 @@ public class TokenizerTest {
         Assertions.assertEquals("a", active.getValue(), "Active token value should be 'a'");
     }
 
-    @Test void TC2() {
+    /**@Test void TC2() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a aa");
         // TODO: >
         Token active = tokenizer.getActiveToken();
@@ -168,4 +168,9 @@ public class TokenizerTest {
         Assertions.assertEquals("ADD", active.getType(), "Active token type should be 'ADD'");
         Assertions.assertEquals("+", active.getValue(), "Active token value should be '+'");
     }
+
+     // TODO: TC for going next stays back on end-token, activeToken stays the same
+
+     // TODO: TC for going previous stays on first token, activeToken stays as the one on index 0
+    */
 }
