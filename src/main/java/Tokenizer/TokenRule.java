@@ -1,5 +1,8 @@
 package Tokenizer;
 
+/**
+ * Token Rule class with a name of the rule and a regex-string to match.
+ */
 public class TokenRule {
     String name;
     String regex;
