@@ -38,10 +38,10 @@ public class TokenizerTest {
         Assertions.assertEquals("WORD", active.getType(), "Active token type should be 'WORD'");
         Assertions.assertEquals("a", active.getValue(), "Active token value should be 'a'");
     }
-
-    /**@Test void TC2() {
+    /*
+    @Test void TC2() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a aa");
-        // TODO: >
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("WORD", active.getType(), "Active token type should be 'WORD'");
@@ -50,7 +50,7 @@ public class TokenizerTest {
 
     @Test void TC3() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a.b");
-        // TODO: >
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("DOT", active.getType(), "Active token type should be 'DOT'");
@@ -59,7 +59,8 @@ public class TokenizerTest {
 
     @Test void TC4() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a.b");
-        // TODO: >>
+        tokenizer.next();
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("WORD", active.getType(), "Active token type should be 'WORD'");
@@ -68,7 +69,8 @@ public class TokenizerTest {
 
     @Test void TC5() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "aa. b");
-        // TODO: >>>
+        tokenizer.next();
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("WORD", active.getType(), "Active token type should be 'WORD'");
@@ -77,7 +79,9 @@ public class TokenizerTest {
 
     @Test void TC6() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a .b");
-        // TODO: >><
+        tokenizer.next();
+        tokenizer.next();
+        tokenizer.previous();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("DOT", active.getType(), "Active token type should be 'DOT'");
@@ -98,33 +102,30 @@ public class TokenizerTest {
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("END", active.getType(), "Active token type should be 'END'");
-        // TODO: Handle END?
-        // Assertions.assertEquals("", active.getValue(), "Active token value should be ''");
+        Assertions.assertEquals("", active.getValue(), "Active token value should be ''");
     }
 
     @Test void TC9() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a");
-        // TODO: >
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("END", active.getType(), "Active token type should be 'END'");
-        // TODO: Handle END?
-        // Assertions.assertEquals("", active.getValue(), "Active token value should be ''");
+        Assertions.assertEquals("", active.getValue(), "Active token value should be ''");
     }
 
     @Test void TC10() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "a");
-        // TODO: <
+        tokenizer.previous();
         Token active = tokenizer.getActiveToken();
 
-        // TODO: Handle END in start?
-        Assertions.assertEquals("END", active.getType(), "Active token type should be 'END'");
-        // Assertions.assertEquals("", active.getValue(), "Active token value should be ''");
+        Assertions.assertEquals("WORD", active.getType(), "Active token type should be 'WORD'");
+        Assertions.assertEquals("a", active.getValue(), "Active token value should be 'a'");
     }
 
     @Test void TC11() {
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "!");
-        // TODO: TEST EXCEPTION
+        // TODO: TEST EXCEPTION TO BE THROWN
     }
 
     @Test void TC12() {
@@ -145,7 +146,9 @@ public class TokenizerTest {
 
     @Test void TC14() {
         Tokenizer tokenizer = new Tokenizer(arithmetic, "3 + 54 * 4");
-        // TODO: >>>
+        tokenizer.next();
+        tokenizer.next();
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("MUL", active.getType(), "Active token type should be 'MUL'");
@@ -154,23 +157,28 @@ public class TokenizerTest {
 
     @Test void TC15() {
         Tokenizer tokenizer = new Tokenizer(arithmetic, "3+5 # 4");
-        // TODO: >>>
+        tokenizer.next();
+        tokenizer.next();
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
-        // TODO: TEST EXCEPTION
+        // TODO: TEST EXCEPTION TO BE THROWN
     }
 
     @Test void TC16() {
         Tokenizer tokenizer = new Tokenizer(arithmetic, "3.0+54.1     + 4.2");
-        // TODO: ><>>>
+        tokenizer.next();
+        tokenizer.previous();
+        tokenizer.next();
+        tokenizer.next();
+        tokenizer.next();
         Token active = tokenizer.getActiveToken();
 
         Assertions.assertEquals("ADD", active.getType(), "Active token type should be 'ADD'");
         Assertions.assertEquals("+", active.getValue(), "Active token value should be '+'");
     }
 
-     // TODO: TC for going next stays back on end-token, activeToken stays the same
+     // TODO: TC for going next when aciteToken is END, stays back on end-token and activeToken stays the same
 
-     // TODO: TC for going previous stays on first token, activeToken stays as the one on index 0
     */
 }
