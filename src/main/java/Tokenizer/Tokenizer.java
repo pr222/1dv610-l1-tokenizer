@@ -8,20 +8,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Tokenizer {
-    private Token activeToken;
-    private GrammarRules grammar;
-    private String leftToTokenize;
-    private final Token END;
     private ArrayList<Token> tokenized;
+    private Token activeToken;
+    private final GrammarRules grammar;
+    private String leftToTokenize;
     private int currentPosition;
 
     public Tokenizer(GrammarRules grammar, String input) {
+        this.tokenized = new ArrayList<Token>();
         this.grammar = grammar;
         this.leftToTokenize = input;
-        this.END = new Token("END", "");
-        this.tokenized = new ArrayList<Token>();
-        // TODO: Match first token and make it the active token.
-        tokenized.add(END);
+        leftToTokenize.trim();
+
+        currentPosition = 0;
+
+        Token endToken = new Token("END", "");
+        tokenized.add(endToken);
 
         this.match();
     }
@@ -30,9 +32,11 @@ public class Tokenizer {
      * Move one step forward but do not exceed number of available tokens.
      */
     public void next() {
-        if(!tokenized.get(currentPosition).equals(this.END)){
-            if(leftToTokenize.length() > 0) {
-                match();
+        if(tokenized.get(currentPosition).getType() != "END"){
+            if(currentPosition == (tokenized.size() - 1)) {
+                if(!leftToTokenize.isEmpty()) {
+                    match();
+                }
             }
 
             currentPosition++;
@@ -53,24 +57,31 @@ public class Tokenizer {
     }
 
     private void match() {
-        ArrayList<Token> matches = new ArrayList<Token>();
+        Token bestMatch = new Token();
 
         for (TokenRule rule : this.grammar.getRules()) {
             Pattern pattern = Pattern.compile(rule.getRegex());
 
-            Matcher matcher = pattern.matcher(leftToTokenize);
+            Matcher match = pattern.matcher(leftToTokenize);
 
-            boolean matched = matcher.matches();
+            boolean matched = match.matches();
 
             if(matched) {
-                // TODO: change, split in the right value
-                Token t = new Token(rule.getName(), "MATCHED!");
-                matches.add(t);
+                int start = match.start();
+                int end = match.end();
+
+                String value = leftToTokenize.substring(start, end);
+                leftToTokenize = leftToTokenize.substring(end);
+                leftToTokenize.trim();
+
+                Token matchedToken = new Token(rule.getName(), value);
+
+                if(bestMatch.getValue().length() < matchedToken.getValue().length()) {
+                    bestMatch = matchedToken;
+                }
             }
         }
-        // TODO: remove
-        leftToTokenize = "";
 
-        tokenized.add(0, matches.get(0));
+        tokenized.add(0, bestMatch);
     }
 }
