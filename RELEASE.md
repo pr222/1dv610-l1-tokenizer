@@ -17,7 +17,7 @@
     - [  ] Reflektion är skriven
 - [ ] Jag eftersträvar med denna inlämning högre betyg (C-B) och anser mig uppfylla alla extra krav för detta.
     - [x] Samtliga testfall är skrivna
-    - [ ?] Egna testfall för Maximal munch och kantfall
+    - [x] Egna testfall för Maximal munch och kantfall
     - [x] Testfall är automatiserade
     - [  ] Det finns en tydlig beskrivning i hur modulen skall användas (i git)
     - [  ] Kodkvalitetskraven är varierade
