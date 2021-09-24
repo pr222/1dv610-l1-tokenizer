@@ -1,12 +1,12 @@
 package Tokenizer;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.function.Executable;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TokenizerTest {
     GrammarRules wordAndDot;
     GrammarRules arithmetic;
+    GrammarRules maxMunch;
 
     @BeforeAll
     public void setupGrammars() {
@@ -30,6 +30,15 @@ public class TokenizerTest {
 
         TokenRule mul = new TokenRule("MUL", "^[*]");
         arithmetic.addRule(mul);
+
+        // MaxMunch grammar
+        maxMunch = new GrammarRules();
+
+        TokenRule integer = new TokenRule("INTEGER", "^[0-9]+");
+        maxMunch.addRule(integer);
+
+        TokenRule flo = new TokenRule("FLOAT", "^[0-9]+\\.[0-9]+");
+        maxMunch.addRule(flo);
     }
 
     @Test void TC1() throws Exception {
@@ -90,7 +99,6 @@ public class TokenizerTest {
     }
 
     @Test void TC7() throws Exception {
-        //
         Tokenizer tokenizer = new Tokenizer(wordAndDot, "");
         Token active = tokenizer.getActiveToken();
 
@@ -127,13 +135,8 @@ public class TokenizerTest {
         Assertions.assertEquals("a", active.getValue(), "Active token value should be 'a'");
     }
 
-    @Test void TC11() throws Exception {
-        Assertions.assertThrows(Exception.class, new Executable() {
-            @Override
-            public void execute() throws Throwable {
-                Tokenizer t = new Tokenizer(wordAndDot, "!");
-            }
-        });
+    @Test void TC11() {
+        Assertions.assertThrows(Exception.class, () -> new Tokenizer(wordAndDot, "!"));
     }
 
     @Test void TC12() throws Exception {
@@ -168,7 +171,6 @@ public class TokenizerTest {
         tokenizer.next();
         tokenizer.next();
 
-        // Calling next a third time in assertion, throwing exception because of # in input.
         Assertions.assertThrows(Exception.class, tokenizer::next);
     }
 
@@ -185,5 +187,26 @@ public class TokenizerTest {
         Assertions.assertEquals("+", active.getValue(), "Active token value should be '+'");
     }
 
-     // TODO: TC for going next when aciteToken is END, stays back on end-token and activeToken stays the same
+     @Test void TC17_ForcingPastEnd() throws Exception {
+         Tokenizer tokenizer = new Tokenizer(arithmetic, "3.0+54.1+4.2");
+         tokenizer.next();
+         tokenizer.next();
+         tokenizer.next();
+         tokenizer.next();
+         tokenizer.next();
+         tokenizer.next();
+         Token active = tokenizer.getActiveToken();
+
+         Assertions.assertEquals("END", active.getType(), "Active token type should be 'END'");
+         Assertions.assertEquals("", active.getValue(), "Active token value should be ''");
+     }
+
+    @Test void TC18_MaxMunch() throws Exception {
+        Tokenizer tokenizer = new Tokenizer(maxMunch, "3.0 54.1");
+        tokenizer.next();
+        Token active = tokenizer.getActiveToken();
+
+        Assertions.assertEquals("FLOAT", active.getType(), "Active token type should be 'FLOAT'");
+        Assertions.assertEquals("54.1", active.getValue(), "Active token value should be '54.1'");
+    }
 }
