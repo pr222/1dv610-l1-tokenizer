@@ -1,11 +1,8 @@
 package Tokenizer;
 
-/**
- * A Token with a matched value and the token that was used for the match.
- */
 public class Token {
-    private String type;
-    private String value;
+    private final String type;
+    private final String value;
 
     public Token() {
         this.type = "";
@@ -21,15 +18,7 @@ public class Token {
         return value;
     }
 
-    public void setValue(String value) {
-        this.value = value;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 }

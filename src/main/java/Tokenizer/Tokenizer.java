@@ -7,82 +7,112 @@ import java.util.regex.Pattern;
 
 public class Tokenizer {
     private final ArrayList<Token> tokenized;
-    // private Token activeToken;
     private final GrammarRules grammar;
     private String leftToTokenize;
-    private int currentPosition;
+    private int activeTokenPosition;
 
     public Tokenizer(GrammarRules grammar, String input) throws Exception {
         this.tokenized = new ArrayList<>();
         this.grammar = grammar;
-        this.leftToTokenize = input;
-        leftToTokenize = leftToTokenize.trim();
-        currentPosition = 0;
+        this.leftToTokenize = input.trim();
 
-        Token endToken = new Token("END", "");
-        tokenized.add(endToken);
+        activeTokenPosition = 0;
+        tokenized.add(new Token("END", ""));
 
-        if(!leftToTokenize.isEmpty()) {
-            this.match();
+        if(hasLeftToTokenize()) {
+            this.tokenize();
         }
     }
 
     public void next() throws Exception {
-        if(!tokenized.get(currentPosition).getType().equals("END")){
-            if(currentPosition == (tokenized.size() - 2)) {
-                if(!leftToTokenize.isEmpty()) {
-                    this.match();
+        if(isNotOnEND()){
+            if(isNotRightBeforeEND()) {
+                if(hasLeftToTokenize()) {
+                    this.tokenize();
                 }
             }
-
-            currentPosition++;
+            activeTokenPosition++;
         }
     }
 
+    private boolean isNotOnEND() {
+        return !tokenized.get(activeTokenPosition).getType().equals("END");
+    }
+
+    private boolean isNotRightBeforeEND() {
+        return activeTokenPosition == (tokenized.size() - 2);
+    }
+
+    private boolean hasLeftToTokenize() {
+        return !leftToTokenize.isEmpty();
+    }
+
     public void previous() {
-        if(currentPosition > 0) {
-            currentPosition--;
+        if(activeTokenPosition > 0) {
+            activeTokenPosition--;
         }
     }
 
     public Token getActiveToken() {
-        return tokenized.get(this.currentPosition);
+        return tokenized.get(this.activeTokenPosition);
     }
 
-    private void match() throws Exception {
+    private void tokenize() throws Exception {
         Token bestMatch = new Token();
-        int endPoint = 0;
 
         for (TokenRule rule : this.grammar.getRules()) {
-            Pattern pattern = Pattern.compile(rule.getRegex());
+            Token match = matchToken(rule);
 
-            Matcher match = pattern.matcher(leftToTokenize);
-
-            boolean found = match.find();
-
-            if(found) {
-                MatchResult res = match.toMatchResult();
-                endPoint = res.end();
-
-                String value = leftToTokenize.substring(res.start(), res.end());
-
-                Token token = new Token(rule.getName(), value);
-
-                if(token.getValue().length() > bestMatch.getValue().length()) {
-                    bestMatch = token;
-                }
-            }
-        }
-        if(endPoint > 0) {
-            leftToTokenize = leftToTokenize.substring(endPoint);
+            bestMatch = maxMunched(match, bestMatch);
         }
 
-        leftToTokenize = leftToTokenize.trim();
-
-        if(bestMatch.getValue().length() > 0) {
-            tokenized.add(tokenized.size()-1, bestMatch);
+        if (isValidMatch(bestMatch)) {
+            insertBeforeEND(bestMatch);
+            cleanUpLeftToTokenize(bestMatch);
         } else {
-            throw new Exception("Could not make a valid match!");
+            throw new Exception("Could not make a valid matched token!");
         }
+    }
+
+    private Token matchToken(TokenRule rule) {
+        String value = "";
+
+        Pattern pattern = Pattern.compile(rule.getRegex());
+        Matcher matcher = pattern.matcher(leftToTokenize);
+
+        boolean found = matcher.find();
+
+        if(found) {
+            MatchResult result = matcher.toMatchResult();
+
+            value = leftToTokenize.substring(result.start(), result.end());
+        }
+
+        return new Token(rule.getName(), value);
+    }
+
+    private Token maxMunched(Token latestMatch, Token bestMatchSoFar) {
+        Token maxed;
+
+        if (latestMatch.getValue().length() > bestMatchSoFar.getValue().length()) {
+            maxed = latestMatch;
+        } else {
+            maxed = bestMatchSoFar;
+        }
+
+        return maxed;
+    }
+
+    private boolean isValidMatch(Token matchedToken) {
+        return matchedToken.getValue().length() > 0;
+    }
+
+    private void insertBeforeEND(Token token) {
+        tokenized.add(tokenized.size()-1, token);
+    }
+
+    private void cleanUpLeftToTokenize(Token toCleanOut) {
+        leftToTokenize = leftToTokenize.substring(toCleanOut.getValue().length());
+        leftToTokenize = leftToTokenize.trim();
     }
 }

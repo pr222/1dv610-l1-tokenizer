@@ -9,7 +9,7 @@ public class GrammarRules {
     ArrayList<TokenRule> rules;
 
     public GrammarRules() {
-        this.rules = new ArrayList<TokenRule>();
+        this.rules = new ArrayList<>();
     }
 
     public void addRule(TokenRule rule) {
