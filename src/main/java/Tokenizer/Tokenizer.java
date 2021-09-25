@@ -72,7 +72,7 @@ public class Tokenizer {
         for (TokenRule rule : this.grammar.getRules()) {
             Token match = matchToken(rule);
 
-            bestMatch = maxMunched(match, bestMatch);
+            bestMatch = maxMunch(match, bestMatch);
         }
 
         if (isValidMatch(bestMatch)) {
@@ -99,7 +99,7 @@ public class Tokenizer {
         return new Token(rule.getName(), value);
     }
 
-    private Token maxMunched(Token latestMatch, Token bestMatchSoFar) {
+    private Token maxMunch(Token latestMatch, Token bestMatchSoFar) {
         Token maxed;
 
         if (latestMatch.getValue().length() > bestMatchSoFar.getValue().length()) {

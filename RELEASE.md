@@ -26,17 +26,21 @@
 Förtydligande: Examinator kommer sätta betyg oberoende på vad ni anser.
 
 ## Återanvändning
-1. Beskriv hur du anpassat din kod och instruktioner för att någon annan programmerare skall kunna använda din tokenizer. Om du skrivit instruktioner för din användare länka till dessa. Om inte beskriv här hur någon skall göra för att använda din kod med sin egen grammatik.
+Beskrivning för en ny användare utav Tokenizer: [README.md](./README.md)
 
 ## Beskrivning av min kod
-2. Beskriv din kod på en hög abstraktionsnivå. En kort beskrivning av dina viktigaste klasser och metoder. Skapa gärna ett klassdiagram som bild.
+Tokenizern tar in en input-sträng som kan tokenizeras och en grammatik fylld med olika regler. Reglerna har regex-uttryck som sedan används för att matchas mot inputen och utifrån matchningarna skapar Tokenizern Tokens. Ett token innehåller då värdet som matchningen resulterade i samt benämning på typ av matching utifrån regelns namn.
+
+Genom metoden getActiveToken() kan man få ut tokenet i den positionen som tokenizeraren befinner sig i för tillfället. Genom metoderna next() och previous() kan man förflytta den positionen och varje gång next() anropas så körs även en ny matchning om det finns något kvar att matcha utav inputen. 
+
+![Tokenizer-class-diagram](./images/Tokenizer-class-diagram-2.png)
 
 ## Hur jag testat
-3. Beskriv hur du kommit fram till om din kod fungerar.
+Testning har gjorts genom att först skapa automatiska tester som sedan utnyttjats under utvecklingens gång. Jag har även testat explorativt i App-classens main-funktion genom att logga ut saker men dessa har tagits bort allteftersom.
+
+Länk till test-klass: [TestTokenizer](https://gitlab.lnu.se/1dv610/student/pr222ja/l1/-/blob/master/src/test/java/Tokenizer/TokenizerTest.java)
 
 ### Testfall
-4. Lista de enskilda testfallen. **Fetmarkera** sådant som du själv fyllt i. En rad per testfall.
-
 | Namn      | Grammatik  | Sträng | Sekvens | Förväntat Aktivt Token | PASS/FAIL |
 | --------- | ---------- | ------ | ------- | ------------ | --------- |
 | TC1       | WordAndDot | "a"    | []      | WORD "a"     | PASS      |
@@ -56,7 +60,7 @@ Förtydligande: Examinator kommer sätta betyg oberoende på vad ni anser.
 | TC15      | Arithmetic | "3+5 # 4" | [>>>] | **Exception** | PASS    |
 | TC16      | Arithmetic | "3.0+54.1     + 4.2" | [><>>>] | **ADD "+"** | PASS      |
 
-Du kan tillföra kommentarer om din tokeniserare skiljer sig något från standard.
+Kommentar: Kastandet utav undantag när en matchning inte kunde göras enligt givna regler körs inte i samband med anrop till aktiv token. Kastandet görs redan vid förflyttningen i samband med anrop till nästa token. Därav är det exempelvis inte möjligt att flytta sig till 'END'-tokenet utan att undantag kastas, även om man aldrig anropar efter aktivt token.
 
 ### Testfall för högre betyg
 | Namn      | Grammatik  | Sträng | Sekvens | Förväntat Aktivt Token | PASS/FAIL |
@@ -64,6 +68,7 @@ Du kan tillföra kommentarer om din tokeniserare skiljer sig något från standa
 | TC17_ForcingPastEnd | Arithmetic | "3.0+54.1+4.2" | [>>>>>>] | END "" | PASS      |
 | TC18_MaxMunch | MaxMunch | "3.0 54.1" | [>] | FLOAT "54.1" | PASS      |
 
+### Samma resultat visat utav Gradle:
 ![Test-results](./images/test-results-2021-09-24.png)
 
 ## Kodkvalitetskrav
@@ -84,11 +89,11 @@ Du kan tillföra kommentarer om din tokeniserare skiljer sig något från standa
 7.
 | Metodnamn och förklaring  | Reflektion                              |
 | -------------------  | ---------------------------------------------|
-| match()              |                                              |
-|                      |                                              |
-|                      |                                              |
-|                      |                                              |
-|                      |                                              |
+| matchToken()              |                                              |
+| match()                     |                                              |
+| maxMunch()                     |                                              |
+| tokenize()                     |                                              |
+| next()                     |                                              |
 
 
 ## Laborationsreflektion
