@@ -19,17 +19,17 @@ public class Tokenizer {
         activeTokenPosition = 0;
         tokenized.add(new Token("END", ""));
 
-        if(hasLeftToTokenize()) {
-            this.tokenize();
-        }
+        this.tokenize();
+    }
+
+    public Token getActiveToken() {
+        return tokenized.get(this.activeTokenPosition);
     }
 
     public void next() throws Exception {
         if(isNotOnEND()){
             if(isNotRightBeforeEND()) {
-                if(hasLeftToTokenize()) {
-                    this.tokenize();
-                }
+                this.tokenize();
             }
             activeTokenPosition++;
         }
@@ -48,16 +48,25 @@ public class Tokenizer {
     }
 
     public void previous() {
-        if(activeTokenPosition > 0) {
+        if(isNotAtStartingPoint()) {
             activeTokenPosition--;
         }
     }
 
-    public Token getActiveToken() {
-        return tokenized.get(this.activeTokenPosition);
+    private boolean isNotAtStartingPoint() {
+        return activeTokenPosition > 0;
     }
 
     private void tokenize() throws Exception {
+        if(hasLeftToTokenize()) {
+            Token matchedToken = match();
+
+            insertBeforeEND(matchedToken);
+            cleanUpLeftToTokenize(matchedToken);
+        }
+    }
+
+    private Token match() throws Exception {
         Token bestMatch = new Token();
 
         for (TokenRule rule : this.grammar.getRules()) {
@@ -67,8 +76,7 @@ public class Tokenizer {
         }
 
         if (isValidMatch(bestMatch)) {
-            insertBeforeEND(bestMatch);
-            cleanUpLeftToTokenize(bestMatch);
+            return bestMatch;
         } else {
             throw new Exception("Could not make a valid matched token!");
         }
