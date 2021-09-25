@@ -19,7 +19,7 @@
     - [x] Samtliga testfall är skrivna
     - [x] Egna testfall för Maximal munch och kantfall
     - [x] Testfall är automatiserade
-    - [  ] Det finns en tydlig beskrivning i hur modulen skall användas (i git)
+    - [x] Det finns en tydlig beskrivning i hur modulen skall användas (i git)
     - [  ] Kodkvalitetskraven är varierade
 - [ ] Jag eftersträvar med denna inlämning högsta betyg (A)
 
