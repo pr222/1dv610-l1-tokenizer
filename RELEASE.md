@@ -14,7 +14,7 @@
     - [x] Koden är förberedd på Återanvändning
     - [x] All kod samt historik finns i git
     - [x] Kodkvalitetskraven är ifyllda
-    - [  ] Reflektion är skriven
+    - [x] Reflektion är skriven
 - [ ] Jag eftersträvar med denna inlämning högre betyg (C-B) och anser mig uppfylla alla extra krav för detta.
     - [x] Samtliga testfall är skrivna
     - [x] Egna testfall för Maximal munch och kantfall
@@ -94,9 +94,12 @@ Kommentar: Kastandet utav undantag när en matchning inte kunde göras enligt gi
 
 
 ## Laborationsreflektion
-8. Reflektera över uppgiften utifrån ett kodkvalitetsperspektiv. Använd begrepp ifrån boken. 
+Jag har fått ett helt annat sätt att tänka kring hur man kan skapa funktioner. Tidigare har vi blivit påtvingade metodskommentarer som snabbt tar upp väldigt mycket plats och ska man försöka hålla en klass inom rimligt antal rader att scrolla sig igenom så blir kandidaterna för små metoder hellre kvar i den stora funktionen.
 
-Vad lärt mig
+Bortsett från metoden för att hämta aktivt token och för att stega framåt och bakåt så skrev jag först en enda metod med nästan all funktionalitet i sig. Under refaktorerings-processen koden så började jag då anamma Robert C. Martins perspektiv av att funktioner ska vara "Små!". Små så som i så få rader som möjligt och i att begränsa sig till antalet indragningar i vardera funktion.
 
-Erfarenheter från egen kodkvalitet / begrepp från bok
+Han tar även upp att metoder ska börja med hög abstraktion och allteftersom gå längre ner i abstraktionsnivå. Så även om jag på något ställe kanske blandar in en lägre nivå i en högre metod, och att det finns säkerligen utrymme för förbättring, så har jag ändå lyckats lyfta abstraktionsnivån väsentligt från hur koden såg ut till att börja med.
 
+Vanligtvis är jag hyfsat bra på att följa regeln ”Don’t repeat yourself” men här smög sig en liten upprepning in som tog ett tag innan jag lyckades se den. Jag körde en boolean-check innan varje anrop för att påbörja tokenisering. Efter upptäckten ändrade jag så att checken istället körs direkt i metoden som har ansvar för tokeniseringsförfarandet istället.
+
+Genom behovet utav att använda mig utav Javas hjälp-klasser Pattern och Matcher så har det också gett mig ett djupare perspektiv i hur objektorienterad kod är tänkt att kunna fungera. I tidigare kurser så har upplevelsen bara varit att ta in moduler och använda enskilda metoder ur dom, jämfört med att som i det här fallet skapa ett "levande objekt" att arbeta med. 
