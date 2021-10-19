@@ -5,18 +5,18 @@ import java.util.ArrayList;
 /**
  * Grammar class managing a collection of rules.
  */
-public class GrammarRules {
-    ArrayList<TokenRule> rules;
+public class TokenGrammar {
+    ArrayList<TokenMatchRule> rules;
 
-    public GrammarRules() {
+    public TokenGrammar() {
         this.rules = new ArrayList<>();
     }
 
-    public void addRule(TokenRule rule) {
+    public void addRule(TokenMatchRule rule) {
         rules.add(rule);
     }
 
-    public ArrayList<TokenRule> getRules() {
+    public ArrayList<TokenMatchRule> getRules() {
         return rules;
     }
 }

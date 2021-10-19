@@ -1,17 +1,14 @@
 package Tokenizer;
 
 import java.util.ArrayList;
-import java.util.regex.MatchResult;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Tokenizer {
     private final ArrayList<Token> tokenized;
-    private final GrammarRules grammar;
+    private final TokenGrammar grammar;
     private String leftToTokenize;
     private int activeTokenPosition;
 
-    public Tokenizer(GrammarRules grammar, String input) throws Exception {
+    public Tokenizer(TokenGrammar grammar, String input) throws Exception {
         this.tokenized = new ArrayList<>();
         this.grammar = grammar;
         this.leftToTokenize = input.trim();
@@ -69,50 +66,21 @@ public class Tokenizer {
     private Token match() throws Exception {
         Token bestMatch = new Token();
 
-        for (TokenRule rule : this.grammar.getRules()) {
-            Token match = matchToken(rule);
+        for (TokenMatchRule rule : this.grammar.getRules()) {
+            Token match = rule.matchToken(leftToTokenize);
 
-            bestMatch = maxMunch(match, bestMatch);
+            boolean isBetter = match.isLongerMatchThan(bestMatch);
+
+            if (isBetter) {
+                bestMatch = match;
+            }
         }
 
-        if (isValidMatch(bestMatch)) {
+        if (bestMatch.isValidMatch()) {
             return bestMatch;
         } else {
             throw new Exception("Could not make a valid matched token!");
         }
-    }
-
-    private Token matchToken(TokenRule rule) {
-        String value = "";
-
-        Pattern pattern = Pattern.compile(rule.getRegex());
-        Matcher matcher = pattern.matcher(leftToTokenize);
-
-        boolean found = matcher.find();
-
-        if(found) {
-            MatchResult result = matcher.toMatchResult();
-
-            value = leftToTokenize.substring(result.start(), result.end());
-        }
-
-        return new Token(rule.getName(), value);
-    }
-
-    private Token maxMunch(Token latestMatch, Token bestMatchSoFar) {
-        Token maxed;
-
-        if (latestMatch.getValue().length() > bestMatchSoFar.getValue().length()) {
-            maxed = latestMatch;
-        } else {
-            maxed = bestMatchSoFar;
-        }
-
-        return maxed;
-    }
-
-    private boolean isValidMatch(Token matchedToken) {
-        return matchedToken.getValue().length() > 0;
     }
 
     private void insertBeforeEND(Token token) {

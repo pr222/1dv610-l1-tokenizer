@@ -21,4 +21,12 @@ public class Token {
     public String getType() {
         return type;
     }
+
+    public boolean isLongerMatchThan(Token anotherToken) {
+        return value.length() > anotherToken.getValue().length();
+    }
+
+    public boolean isValidMatch() {
+        return value.length() > 0;
+    }
 }

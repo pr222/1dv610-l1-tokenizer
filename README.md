@@ -38,12 +38,12 @@ By calling previous() you can move backwards among the already tokenized token. 
 
 ### Build the grammar...
 ````
-    GrammarRules wordAndDot = new GrammarRules();
+    TokenGrammar wordAndDot = new TokenGrammar();
 
-    TokenRule word = new TokenRule("WORD", "^[\\w|åäöÅÄÖ]+");
+    TokenMatchRule word = new TokenMatchRule("WORD", "^[\\w|åäöÅÄÖ]+");
     wordAndDot.addRule(word);
 
-    TokenRule dot = new TokenRule("DOT", "^\\.");
+    TokenMatchRule dot = new TokenMatchRule("DOT", "^\\.");
     wordAndDot.addRule(dot);``
 ````
 
@@ -71,4 +71,4 @@ By calling previous() you can move backwards among the already tokenized token. 
 ````
 
 ## Class diagram
-![class-diagram-tokenizer](./images/Tokenizer-class-diagram-2.png)
+![class-diagram-tokenizer](./images/Tokenizer-class-diagram_1-1.png)

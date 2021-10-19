@@ -4,40 +4,40 @@ import org.junit.jupiter.api.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class TokenizerTest {
-    GrammarRules wordAndDot;
-    GrammarRules arithmetic;
-    GrammarRules maxMunch;
+    TokenGrammar wordAndDot;
+    TokenGrammar arithmetic;
+    TokenGrammar maxMunch;
 
     @BeforeAll
     public void setupGrammars() {
         // Word and dot grammar
-        wordAndDot = new GrammarRules();
+        wordAndDot = new TokenGrammar();
 
-        TokenRule word = new TokenRule("WORD", "^[\\w|åäöÅÄÖ]+");
+        TokenMatchRule word = new TokenMatchRule("WORD", "^[\\w|åäöÅÄÖ]+");
         wordAndDot.addRule(word);
 
-        TokenRule dot = new TokenRule("DOT", "^\\.");
+        TokenMatchRule dot = new TokenMatchRule("DOT", "^\\.");
         wordAndDot.addRule(dot);
 
         // Arithmetic grammar
-        arithmetic = new GrammarRules();
+        arithmetic = new TokenGrammar();
 
-        TokenRule number = new TokenRule("NUMBER", "^[0-9]+(\\.([0-9])+)?");
+        TokenMatchRule number = new TokenMatchRule("NUMBER", "^[0-9]+(\\.([0-9])+)?");
         arithmetic.addRule(number);
 
-        TokenRule add = new TokenRule("ADD", "^[+]");
+        TokenMatchRule add = new TokenMatchRule("ADD", "^[+]");
         arithmetic.addRule(add);
 
-        TokenRule mul = new TokenRule("MUL", "^[*]");
+        TokenMatchRule mul = new TokenMatchRule("MUL", "^[*]");
         arithmetic.addRule(mul);
 
         // MaxMunch grammar
-        maxMunch = new GrammarRules();
+        maxMunch = new TokenGrammar();
 
-        TokenRule integer = new TokenRule("INTEGER", "^[0-9]+");
+        TokenMatchRule integer = new TokenMatchRule("INTEGER", "^[0-9]+");
         maxMunch.addRule(integer);
 
-        TokenRule flo = new TokenRule("FLOAT", "^[0-9]+\\.[0-9]+");
+        TokenMatchRule flo = new TokenMatchRule("FLOAT", "^[0-9]+\\.[0-9]+");
         maxMunch.addRule(flo);
     }
 
